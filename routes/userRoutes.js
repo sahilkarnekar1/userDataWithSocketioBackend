@@ -3,7 +3,7 @@ const multer = require('multer');
 const { createUser, getUsers } = require('../controllers/userController');
 
 const router = express.Router();
-const upload = multer({ dest: 'uploads/' });  // Use multer for handling form data
+const upload = multer();  // Use multer for handling form data
 
 module.exports = (io) => {
     // POST: Submit user data (with images) and pass `io` to the controller
