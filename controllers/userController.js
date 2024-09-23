@@ -7,12 +7,20 @@ exports.createUser = async (req, res, io) => {
         const { name, socialMediaHandle } = req.body;
         let imagesArray = [];
 
-        if (req.files) {
-            // Loop through uploaded files and upload each to Cloudinary
+        if (req.files && req.files.length > 0) {
+            // Loop through each uploaded file
             for (const file of req.files) {
-                const result = await cloudinary.uploader.upload(file.path, {
-                    folder: 'user_images'
+                const result = await new Promise((resolve, reject) => {
+                    const uploadStream = cloudinary.uploader.upload_stream(
+                        { folder: 'user_images' },  // Specify the folder in Cloudinary
+                        (error, result) => {
+                            if (error) reject(error); // Handle Cloudinary error
+                            else resolve(result); // Resolve the promise with result
+                        }
+                    );
+                    uploadStream.end(file.buffer);  // Use the file buffer from multer
                 });
+
                 imagesArray.push(result.secure_url); // Store Cloudinary image URL
             }
         }

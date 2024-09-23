@@ -35,10 +35,6 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 
 // Routes
 // Routes
-// Basic route
-app.get('/', (req, res) => {
-    res.send('Hello, World!');
-  });
 app.use('/api', userRoutes(io));  // Pass the `io` instance to the routes
 
 // Socket.io logic

@@ -2,8 +2,13 @@ const express = require('express');
 const multer = require('multer');
 const { createUser, getUsers } = require('../controllers/userController');
 
+
+// Use memory storage for multer to avoid saving images to disk
+const storage = multer.memoryStorage();  
+const upload = multer({ storage });
+
 const router = express.Router();
-const upload = multer();  // Use multer for handling form data
+
 
 module.exports = (io) => {
     // POST: Submit user data (with images) and pass `io` to the controller
