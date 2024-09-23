@@ -10,13 +10,7 @@ const cors = require('cors');
 dotenv.config();
 
 const app = express();
-
-// CORS configuration
-app.use(cors({
-    origin: "https://users-data-with-socketio-frontend.vercel.app", // Replace with your frontend URL
-    credentials: true // Optional
-}));
-
+app.use(cors());
 const PORT = process.env.PORT || 5000;
 
 // Create an HTTP server
@@ -25,9 +19,8 @@ const server = http.createServer(app);
 // Initialize socket.io with the server
 const io = new Server(server, {
     cors: {
-        origin: "https://users-data-with-socketio-frontend.vercel.app", // Replace with your frontend URL
-        methods: ["GET", "POST"],
-        credentials: true // Optional
+        origin: "*", // Adjust the origin based on your requirements
+        methods: ["GET", "POST"]
     }
 });
 
@@ -41,14 +34,17 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
     .catch(err => console.log(err));
 
 // Routes
+// Routes
+// Basic route
 app.get('/', (req, res) => {
     res.send('Hello, World!');
-});
+  });
 app.use('/api', userRoutes(io));  // Pass the `io` instance to the routes
 
 // Socket.io logic
 io.on('connection', (socket) => {
     console.log('A user connected:', socket.id);
+
 
     // Handle disconnection
     socket.on('disconnect', () => {
@@ -57,4 +53,4 @@ io.on('connection', (socket) => {
 });
 
 // Start server using http server, not app.listen
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`)); 
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
