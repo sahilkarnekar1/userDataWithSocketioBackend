@@ -19,7 +19,7 @@ const server = http.createServer(app);
 // Initialize socket.io with the server
 const io = new Server(server, {
     cors: {
-        origin: "*", // Adjust the origin based on your requirements
+        origin: "https://users-data-with-socketio-frontend.vercel.app/", // Adjust the origin based on your requirements
         methods: ["GET", "POST"]
     }
 });
